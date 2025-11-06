@@ -3,26 +3,24 @@ import React from 'react'
 import { Button } from 'react-native'
 import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ParamListBase } from '@react-navigation/native';
-import { HomeScreenProps } from '../interface/NavigationInterface';
+import { HomeScreenProps, HomeScreenPropsBottom, HomeScreenPropsTop } from '../interface/NavigationInterface';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 
-
-export default function HomeScreen({ navigation }: HomeScreenProps) {
+export default function HomeScreen({ navigation }: HomeScreenPropsTop) {
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.txt}>Você já pode descansar meu filho!</Text>
-      <Image style={styles.img} source={{ uri: 'https://i.pinimg.com/736x/55/48/ae/5548ae923c56829f9123cb8852ebc728.jpg' }} />
-      <Button
-        title="Ir para Apollo"
-        onPress={() => navigation.navigate('Profile', { userId: 1111})}
-      />
-      <Button
-        title="Ir para o Goat"
-        onPress={() => navigation.navigate('About')}
-      />
-    </View>
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={styles.container}>
+        <Text style={styles.txt}>Você já pode descansar meu filho!</Text>
+        <Image style={styles.img} source={{ uri: 'https://i.pinimg.com/736x/55/48/ae/5548ae923c56829f9123cb8852ebc728.jpg' }} />
+        <Button
+          title="Ir para o Goat"
+          onPress={() => navigation.navigate('About')}
+        />
+      </View>
+    </SafeAreaView>
   )
 }
 

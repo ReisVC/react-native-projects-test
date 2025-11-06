@@ -1,5 +1,8 @@
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { ParamListBase, RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { createMaterialTopTabNavigator, MaterialTopTabNavigationProp } from '@react-navigation/material-top-tabs';
+
 
 export interface StackParamList extends ParamListBase {
   Home: undefined;
@@ -14,4 +17,34 @@ export interface HomeScreenProps {
 export interface ProfileScreenProps {
   navigation: NativeStackNavigationProp<StackParamList, 'Profile'>;
   route: RouteProp<StackParamList, 'Profile'>
+}
+
+// TAB ----------------------------------------------------------
+
+export interface BottomTabParamList extends ParamListBase {
+  Home: undefined;
+  About: undefined;
+}
+
+export interface HomeScreenPropsBottom {
+  navigation: BottomTabNavigationProp<BottomTabParamList, 'Home'>;
+}
+
+export interface AboutScreenPropsBottom {
+  navigation: BottomTabNavigationProp<BottomTabParamList, 'About'>;
+}
+
+// TOP -------------------------------------------------------
+
+export interface TopTabsParamList extends ParamListBase {
+  Home: undefined;
+  About: undefined;
+}
+
+export interface HomeScreenPropsTop {
+  navigation: MaterialTopTabNavigationProp<TopTabsParamList, 'Home'>;
+}
+
+export interface AboutScreenPropsTop {
+  navigation: MaterialTopTabNavigationProp<TopTabsParamList, 'About'>;
 }

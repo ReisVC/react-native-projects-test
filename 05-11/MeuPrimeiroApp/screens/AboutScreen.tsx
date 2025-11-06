@@ -3,22 +3,22 @@ import React from 'react'
 import { Button } from 'react-native'
 import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { ParamListBase } from '@react-navigation/native';
+import { AboutScreenPropsBottom, AboutScreenPropsTop } from '../interface/NavigationInterface';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
-export default function HomeScreen(props: {navigation: any}) {
+export default function HomeScreen({navigation}: AboutScreenPropsTop) {
   return (
-    <View style={styles.container}>
-      <Text style={styles.txt}>Ignore eles, venha para cá!</Text>
-      <Image style={styles.img} source={{ uri: 'https://i8.amplience.net/i/naras/sean_diddy_combs.jpg.jpg'}}/>
-       <Button
-        title="Ir para Apollo"
-        onPress={() => props.navigation.navigate('Profile')} 
-      /> 
-       <Button
-        title="Ir para o Rocky"
-        onPress={() => props.navigation.navigate('Home')} 
-      />
-    </View>
+    <SafeAreaView>
+      <View style={styles.container}>
+        <Text style={styles.txt}>Ignore eles, venha para cá!</Text>
+        <Image style={styles.img} source={{ uri: 'https://i8.amplience.net/i/naras/sean_diddy_combs.jpg.jpg'}}/>
+        <Button
+          title="Ir para o Rocky"
+          onPress={() => navigation.navigate('Home')} 
+        />
+      </View>
+    </SafeAreaView>
   )
 }
 
