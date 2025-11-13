@@ -1,13 +1,13 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeScreen from './HomeScreen';
-import SettingScreen from './SettingScreen';
+import HomeScreen from '../screens/HomeScreen';
+import SettingScreen from '../screens/SettingScreen';
 import { Ionicons } from '@expo/vector-icons';
-import { BottomTabParamList } from '../interfaces/NavigationTypes';
+import { RootTabParamList } from '../interfaces/NavigationTypes';
 
 
-const Tab = createBottomTabNavigator<BottomTabParamList>();
+const Tab = createBottomTabNavigator<RootTabParamList>();
 
 
 export default function TabNavigator() {

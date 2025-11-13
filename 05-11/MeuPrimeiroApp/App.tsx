@@ -67,6 +67,3 @@ export default function App() {
 //     </NavigationContainer>
 //   );
 // }
-
-
-// ABCDEFGHIJKLMNOPQRSTUV

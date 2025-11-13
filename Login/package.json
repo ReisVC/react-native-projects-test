@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "expo-cli": "^6.3.12",
+    "react-native-safe-area-context": "4.6.3"
+  }
+}

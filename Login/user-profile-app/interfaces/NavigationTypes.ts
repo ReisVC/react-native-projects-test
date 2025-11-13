@@ -1,50 +1,29 @@
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { ParamListBase, RouteProp } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { User } from "./UserInterface";
+import { StackNavigationProp } from "@react-navigation/stack";
 // import { createMaterialTopTabNavigator, MaterialTopTabNavigationProp } from '@react-navigation/material-top-tabs';
 
 
-export interface StackParamList extends ParamListBase {
-  Home: undefined;
-  About: undefined;
-  Profile: { userId: number };
+export interface RootTabParamList extends ParamListBase {
+  Home: {user?: User};
+  Settings: undefined
 }
 
-export interface HomeScreenProps {
-  navigation: NativeStackNavigationProp<StackParamList, 'Home'>;
+export interface RootStackParamList extends ParamListBase {
+  Tabs: { user?: User };
+  Profile: {user: User}
 }
 
-export interface ProfileScreenProps {
-  navigation: NativeStackNavigationProp<StackParamList, 'Profile'>;
-  route: RouteProp<StackParamList, 'Profile'>
+export interface HomeTabScreenProps {
+    navigation: BottomTabNavigationProp<RootTabParamList, 'Home'>; 
 }
 
-// TAB ----------------------------------------------------------
-
-export interface BottomTabParamList extends ParamListBase {
-  Home: undefined;
-  Edit: undefined;
+export interface SettingsTabScreenProps {
+    navigation: BottomTabNavigationProp<RootTabParamList, 'Settings'>;
 }
 
-export interface HomeScreenPropsBottom {
-  navigation: BottomTabNavigationProp<BottomTabParamList, 'Home'>;
+export interface EditProfileScreenProps {
+    navigation: StackNavigationProp<RootStackParamList, "Profile">;
+    route: { params: { user: User }}
 }
-
-export interface EditScreenPropsBottom {
-  navigation: BottomTabNavigationProp<BottomTabParamList, 'Edit'>;
-}
-
-// TOP -------------------------------------------------------
-
-export interface TopTabsParamList extends ParamListBase {
-  Home: undefined;
-  About: undefined;
-}
-
-// export interface HomeScreenPropsTop {
-//   navigation: MaterialTopTabNavigationProp<TopTabsParamList, 'Home'>;
-// }
-
-// export interface AboutScreenPropsTop {
-//   navigation: MaterialTopTabNavigationProp<TopTabsParamList, 'About'>;
-// }
