@@ -1,20 +1,200 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from "react";
+import { Button, View, Text, Platform, Alert, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+// Importa o módulo de notificações do Expo
+import * as Notifications from "expo-notifications";
 
+/* 
+-------------------------------------------------------
+ CONFIGURAÇÃO GLOBAL DAS NOTIFICAÇÕES
+-------------------------------------------------------
+Aqui definimos como o app deve reagir quando uma notificação 
+for recebida enquanto o aplicativo está ABERTO.
+*/
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    // Exibe um alerta visual na tela (banner)
+    shouldShowAlert: true,
+    // Reproduz som de notificação (se houver)
+    shouldPlaySound: true,
+    // Não altera o "badge" do app (aquele número no ícone)
+    shouldSetBadge: false,
+    // Mostra a notificação na parte superior (Android/iOS)
+    shouldShowBanner: true,
+    // Exibe na Central de Notificações (iOS 15+)
+    shouldShowList: true,
+  }),
+});
+
+/* 
+-------------------------------------------------------
+ COMPONENTE PRINCIPAL DO APP
+-------------------------------------------------------
+É o componente funcional padrão do React Native.
+*/
 export default function App() {
+
+  const [titleNotification, setTitleNotification] = useState<string>("Notificação Local");
+  const [bodyNotification, setBodyNotification] = useState<string>("Enviada diretamente do app");
+  const [timerNotification, setTimerNotification] = useState<number>(3);
+
+  /* 
+  useEffect: executa ações assim que o componente é montado.
+  Aqui, usamos ele para:
+   - Pedir permissão de notificação
+   - Criar um "listener" que reage quando uma notificação é recebida
+  */
+  useEffect(() => {
+    // Chama a função que solicita permissão do usuário
+    pedirPermissao();
+
+    // Cria um listener que "ouve" quando uma notificação é recebida
+    const subscription: Notifications.EventSubscription =
+      Notifications.addNotificationReceivedListener((notification) => {
+        // Apenas exibe no console a notificação recebida
+        console.log("Notificação recebida:", notification);
+      });
+
+    // Remove o listener quando o componente for desmontado
+    return () => subscription.remove();
+  }, []);
+
+  /* 
+  Função para ENVIAR uma notificação local.
+  É chamada quando o usuário aperta o botão na tela.
+  */
+  const enviarNotificacao = async () => {
+    await Notifications.scheduleNotificationAsync({
+      // Conteúdo da notificação (título, corpo, som, etc.)
+      content: {
+        title: titleNotification, // Título da notificação
+        body: bodyNotification, // Texto que aparece
+        sound: true, // Toca som (no iOS)
+      },
+      // Define o "gatilho" (quando ela será exibida)
+      trigger: {
+        // Tipo do agendamento: intervalo de tempo
+        type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
+        // Quantos segundos esperar até exibir (aqui: 3 segundos)
+        seconds: timerNotification,
+      },
+    });
+  };
+
+  /* 
+  JSX — parte visual do aplicativo.
+  Mostra um título e um botão para disparar a notificação.
+  */
   return (
     <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <TextInput
+      style={styles.input}
+      placeholder="Qual o título?"
+      onChangeText={text => setTitleNotification(text)}
+      placeholderTextColor='#6c1e6cff'
+      />
+      <TextInput
+      style={styles.input}
+      placeholder="Qual a mensagem?"
+      onChangeText={text => setBodyNotification(text)}
+      placeholderTextColor='#6c1e6cff'
+
+      />
+      <TextInput
+      style={[styles.input, styles.textInputTimer]}
+      placeholder="Em quanto tempo..."
+      keyboardType="numeric"
+      onChangeText={text => setTimerNotification(Number(text))}
+      placeholderTextColor='#6c1e6cff'
+      />
+      <TouchableOpacity style={styles.btn} onPress={enviarNotificacao}>
+        <Text style={styles.titleBtn}>Enviar Notificação</Text>
+      </TouchableOpacity>
     </View>
   );
 }
 
+/* 
+-------------------------------------------------------
+ FUNÇÃO DE PERMISSÃO PARA NOTIFICAÇÕES
+-------------------------------------------------------
+Toda notificação precisa da autorização do usuário.
+Essa função pede e verifica essa permissão.
+*/
+async function pedirPermissao(): Promise<void> {
+  // Verifica o status atual da permissão
+  const { status } = await Notifications.getPermissionsAsync();
+
+  // Se ainda não está concedida...
+  if (status !== "granted") {
+    // Pede permissão ao usuário
+    const { status: novoStatus } = await Notifications.requestPermissionsAsync();
+
+    // Se o usuário negar, mostra um alerta
+    if (novoStatus !== "granted") {
+      Alert.alert("Permissão negada", "O app não poderá enviar notificações.");
+      return;
+    }
+  }
+
+  /* 
+  No Android, é OBRIGATÓRIO criar um "canal de notificação".
+  Esse canal define regras como prioridade, som e categoria.
+  */
+  if (Platform.OS === "android") {
+    await Notifications.setNotificationChannelAsync("default", {
+      name: "default", // Nome interno do canal
+      importance: Notifications.AndroidImportance.MAX, // Prioridade máxima
+      sound: "default", // Usa o som padrão do sistema (deve ser string)
+    });
+  }
+}
+
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flex: 1, 
+    justifyContent: "center", 
+    alignItems: "center", 
+    backgroundColor: "#ecb1ecff",
+    padding: 20, 
   },
+  title: {
+    fontSize: 20,
+    marginBottom: 20, 
+    textAlign: "center", 
+  },
+  input: {
+    height: 80,
+    width: '100%',
+    textAlign: 'center',
+    justifyContent: 'center',
+    fontSize: 21,
+    borderWidth: 2,
+    borderRadius: 10,
+    marginBottom: 10,
+    fontFamily: 'Arial',
+    fontStyle: 'italic',
+    fontWeight: 800,
+    color: "#6c1e6cff",
+    backgroundColor: '#cae1f8ff',
+  },
+  btn: {
+    backgroundColor: '#cae1f8ff',
+    height: 50,
+    width: 200,
+    textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#75055fff',
+    borderRadius: 5,
+    marginTop: 20
+  },
+  titleBtn: {
+    fontSize: 18,
+    fontWeight: 800,
+    fontStyle: 'italic'
+  },
+  textInputTimer: {
+    maxWidth: 200
+  }
 });
