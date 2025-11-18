@@ -33,9 +33,9 @@ Notifications.setNotificationHandler({
 */
 export default function App() {
 
-  const [titleNotification, setTitleNotification] = useState<string>("Notificação Local");
-  const [bodyNotification, setBodyNotification] = useState<string>("Enviada diretamente do app");
-  const [timerNotification, setTimerNotification] = useState<number>(3);
+  const [titleNotification, setTitleNotification] = useState<string>("Notificação Local")
+  const [bodyNotification, setBodyNotification] = useState<string>("Enviada diretamente do app")
+  const [timerNotification, setTimerNotification] = useState<number>(3)
 
   /* 
   useEffect: executa ações assim que o componente é montado.
